@@ -1,0 +1,45 @@
+services:
+  nginx:
+    build: ./requirements/nginx
+    image: nginx
+    networks:
+      - inception
+    volumes:
+      - wp_data:/var/www/html:ro
+    depends_on:
+      - wordpress
+  wordpress:
+    build: ./requirements/wordpress
+    image: wordpress
+    networks:
+      - inception
+    volumes:
+      - wp_data:/var/www/html
+    depends_on:
+      - mariadb
+    environment:
+      - WORDPRESS_DB_NAME=${MYSQL_DATABASE}
+      - WORDPRESS_DB_USER=${MYSQL_USER}
+      - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
+      - WORDPRESS_DB_HOST=mariadb
+  mariadb:
+    build: ./requirements/mariadb 
+    image: mariadb
+    networks:
+      - inception
+    volumes:
+      - wp_data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_SUPERVISOR=${MYSQL_SUPERVISOR}
+      - MYSQL_SUPERVISOR_PASSWORD=${MYSQL_SUPERVISOR_PASSWORD}
+
+volumes:
+  db_data:
+  wp_data:
+
+networks:
+  inception:
