@@ -5,30 +5,48 @@ services:
     networks:
       - inception
     volumes:
-      - wp_data:/var/www/html:ro
+      - /home/shurtado/data/wp:/var/www/html:ro
     depends_on:
       - wordpress
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    environment:
+      - DOMAIN=${DOMAIN}
+
   wordpress:
     build: ./requirements/wordpress
     image: wordpress
     networks:
       - inception
     volumes:
-      - wp_data:/var/www/html
+      - /home/shurtado/data/wp:/var/www/html
     depends_on:
       - mariadb
+    restart: unless-stopped
     environment:
       - WORDPRESS_DB_NAME=${MYSQL_DATABASE}
       - WORDPRESS_DB_USER=${MYSQL_USER}
       - WORDPRESS_DB_PASSWORD=${MYSQL_PASSWORD}
       - WORDPRESS_DB_HOST=mariadb
+
+      - WP_URL=${WP_URL}
+      - WP_TITLE=${WP_TITLE}
+      - WP_ADMIN_USER=${WP_ADMIN_USER}
+      - WP_ADMIN_PASSWORD=${WP_ADMIN_PASSWORD}
+      - WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}
+      - WP_SECOND_USER=${WP_SECOND_USER}
+      - WP_SECOND_PASSWORD=${WP_SECOND_PASSWORD}
+      - WP_SECOND_EMAIL=${WP_SECOND_EMAIL}
+
   mariadb:
-    build: ./requirements/mariadb 
+    build: ./requirements/mariadb
     image: mariadb
     networks:
       - inception
     volumes:
-      - wp_data:/var/lib/mysql
+      - /home/shurtado/data/db:/var/lib/mysql
+    restart: unless-stopped
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
@@ -37,9 +55,6 @@ services:
       - MYSQL_SUPERVISOR=${MYSQL_SUPERVISOR}
       - MYSQL_SUPERVISOR_PASSWORD=${MYSQL_SUPERVISOR_PASSWORD}
 
-volumes:
-  db_data:
-  wp_data:
-
 networks:
   inception:
+
