@@ -1,0 +1,5 @@
+# env real
+srcs/.env
+
+# secretos
+secrets/*

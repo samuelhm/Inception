@@ -4,6 +4,8 @@ set -e
 DATADIR="/var/lib/mysql"
 SOCKET="/var/run/mysqld/mysqld.sock"
 MARKER_FILE="${DATADIR}/.initialized"
+MYSQL_PASSWORD="$(cat ../../../secrets/db_password)"
+MYSQL_ROOT_PASSWORD="$(cat ../../../secrets/db_root_password)"
 
 if [ ! -f "$MARKER_FILE" ]; then
 	echo "[INFO] Ejecutando script de inicialización de MariaDB..."
