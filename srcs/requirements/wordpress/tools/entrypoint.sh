@@ -2,7 +2,8 @@
 set -e
 
 WP_PATH="/var/www/html"
-WP_ADMIN_PASSWORD="cat ../../../secrets/wp_admin_password.txt"
+WP_ADMIN_PASSWORD="cat /run/secrets/wp_admin_password"
+export WORDPRESS_DB_PASSWORD=$(cat /run/secrets/db_password)
 
 # 1) Si el volumen está vacío, copiar WordPress inicial
 if [ -z "$(ls -A "$WP_PATH" 2>/dev/null)" ]; then
