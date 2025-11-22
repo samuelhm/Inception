@@ -35,10 +35,10 @@ services:
       - WP_ADMIN_PASSWORD=dummy
       - WP_ADMIN_EMAIL=${WP_ADMIN_EMAIL}
       - WP_SECOND_USER=${WP_SECOND_USER}
-      - WP_SECOND_PASSWORD=${WP_SECOND_PASSWORD}
       - WP_SECOND_EMAIL=${WP_SECOND_EMAIL}
     secrets:
       - wp_admin_password
+      - wp_second_password
       - db_password
  
   mariadb:
@@ -53,11 +53,11 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_SUPERVISOR=${MYSQL_SUPERVISOR}
-      - MYSQL_SUPERVISOR_PASSWORD=${MYSQL_SUPERVISOR_PASSWORD}
 
     secrets:
       - db_password
       - db_root_password
+      - mysql_supervisor_password
 
 secrets:
   db_password:
@@ -66,6 +66,12 @@ secrets:
     file: ../secrets/db_root_password.txt
   wp_admin_password:
     file: ../secrets/wp_admin_password.txt
+  wp_second_password:
+    file: ../secrets/wp_second_password.txt
+  mysql_supervisor_password:
+    file: ../secrets/mysql_supervisor_password.txt
+
+      
 networks:
   inception:
 

@@ -2,8 +2,9 @@
 set -e
 
 WP_PATH="/var/www/html"
-WP_ADMIN_PASSWORD="cat /run/secrets/wp_admin_password"
+WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_admin_password)
 export WORDPRESS_DB_PASSWORD=$(cat /run/secrets/db_password)
+SECOND_PASS=$(cat /run/secrets/wp_second_password)
 
 # 1) Si el volumen está vacío, copiar WordPress inicial
 if [ -z "$(ls -A "$WP_PATH" 2>/dev/null)" ]; then
@@ -46,7 +47,7 @@ if ! wp core is-installed --allow-root --path="$WP_PATH" >/dev/null 2>&1; then
 
 	echo "[INFO] Creando segundo usuario de WordPress..."
 	wp user create "${WP_SECOND_USER}" "${WP_SECOND_EMAIL}" \
-		--user_pass="${WP_SECOND_PASSWORD}" \
+		--user_pass="${SECOND_PASS}" \
 		--role=editor \
 		--allow-root \
 		--path="$WP_PATH"

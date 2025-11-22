@@ -6,6 +6,7 @@ SOCKET="/var/run/mysqld/mysqld.sock"
 MARKER_FILE="${DATADIR}/.initialized"
 MYSQL_PASSWORD="$(cat /run/secrets/db_password)"
 MYSQL_ROOT_PASSWORD="$(cat /run/secrets/db_root_password)"
+MYSQL_SUPERVISOR_PASSWORD=$(cat /run/secrets/mysql_supervisor_password)
 
 
 if [ ! -f "$MARKER_FILE" ]; then
