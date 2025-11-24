@@ -3,3 +3,4 @@ srcs/.env
 
 # secretos
 secrets/*
+backup/*
