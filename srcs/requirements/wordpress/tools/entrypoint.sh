@@ -61,5 +61,5 @@ chown -R www-data:www-data /run/php
 chown -R www-data:www-data "$WP_PATH"
 
 echo "[INFO] Arrancando PHP-FPM..."
-exec php-fpm7.4 -F
+exec php-fpm8.2 -F
 

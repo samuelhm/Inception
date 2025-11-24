@@ -1,5 +1,6 @@
 services:
   nginx:
+    container_name: nginx
     build: ./requirements/nginx
     image: nginx
     networks:
@@ -16,11 +17,12 @@ services:
 
   wordpress:
     build: ./requirements/wordpress
+    container_name: wordpress
     image: wordpress
     networks:
       - inception
     volumes:
-      - /home/shurtado/data/wp:/var/www/html
+      - wp:/var/www/html
     depends_on:
       - mariadb
     restart: unless-stopped
@@ -43,11 +45,12 @@ services:
  
   mariadb:
     build: ./requirements/mariadb
+    container_name: mariadb
     image: mariadb
     networks:
       - inception
     volumes:
-      - /home/shurtado/data/db:/var/lib/mysql
+      - db:/var/lib/mysql
     restart: unless-stopped
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
@@ -74,4 +77,16 @@ secrets:
       
 networks:
   inception:
-
+volumes:
+  wp:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/shurtado/data/wp
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/shurtado/data/db
