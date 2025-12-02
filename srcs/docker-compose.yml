@@ -25,8 +25,11 @@ services:
       - wp:/var/www/html
     depends_on:
       - mariadb
+      - redis
     restart: unless-stopped
     environment:
+      - WP_REDIS_HOST=redis
+      - WP_REDIS_PORT=6379 
       - WORDPRESS_DB_NAME=${MYSQL_DATABASE}
       - WORDPRESS_DB_USER=${MYSQL_USER}
       - WORDPRESS_DB_HOST=mariadb
@@ -62,6 +65,16 @@ services:
       - db_root_password
       - mysql_supervisor_password
 
+  redis:
+    build: ./requirements/bonus/redis
+    container_name: redis
+    image: bonus-redis
+    networks:
+      - inception
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
 secrets:
   db_password:
     file: ../secrets/db_password.txt
@@ -90,3 +103,7 @@ volumes:
       type: none
       o: bind
       device: /home/shurtado/data/db
+
+  redis_data:
+    driver: local
+

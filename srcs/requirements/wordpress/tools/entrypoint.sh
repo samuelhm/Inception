@@ -54,7 +54,18 @@ if ! wp core is-installed --allow-root --path="$WP_PATH" >/dev/null 2>&1; then
 else
 	echo "[INFO] WordPress ya está instalado, saltando instalación."
 fi
+if ! grep -q "WP_REDIS_HOST" wp-config.php; then
+    wp config set WP_REDIS_HOST 'redis' --type=constant --allow-root --path="$WP_PATH"
+    wp config set WP_REDIS_PORT 6379      --type=constant --allow-root --path="$WP_PATH"
+    wp config set WP_CACHE true           --type=constant --allow-root --path="$WP_PATH"
+fi
 
+if ! wp plugin is-installed redis-cache --allow-root --path="$WP_PATH"; then
+    wp plugin install redis-cache --activate --allow-root --path="$WP_PATH"
+fi
+if ! wp redis status --allow-root --path="$WP_PATH" >/dev/null 2>&1; then
+    wp redis enable --allow-root --path="$WP_PATH"
+fi
 # 5) Preparar PHP-FPM
 mkdir -p /run/php
 chown -R www-data:www-data /run/php
@@ -62,4 +73,3 @@ chown -R www-data:www-data "$WP_PATH"
 
 echo "[INFO] Arrancando PHP-FPM..."
 exec php-fpm8.2 -F
-
