@@ -75,6 +75,23 @@ services:
       - redis_data:/data
     restart: unless-stopped
 
+  ftp:
+    build: ./requirements/bonus/ftp
+    container_name: ftp
+    image: bonus-ftp
+    networks:
+      - inception
+    volumes:
+      - wp:/var/www/html
+    ports:
+      - "21:21"
+      - "21000-21010:21000-21010"
+    environment:
+      - FTP_USER=${FTP_USER}
+      - FTP_PASS=${FTP_PASS}
+    restart: unless-stopped
+
+
 secrets:
   db_password:
     file: ../secrets/db_password.txt
