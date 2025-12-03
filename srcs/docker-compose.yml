@@ -91,6 +91,30 @@ services:
       - FTP_PASS=${FTP_PASS}
     restart: unless-stopped
 
+  adminer:
+    build: ./requirements/bonus/adminer
+    container_name: adminer
+    image: bonus-adminer
+    networks:
+      - inception
+    ports:
+      - "8081:8080"
+    restart: unless-stopped
+
+  portainer:
+    build: ./requirements/bonus/portainer
+    container_name: portainer
+    image: bonus-portainer
+    networks:
+      - inception
+    ports:
+      - "9443:9443"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+    restart: unless-stopped
+
+
 
 secrets:
   db_password:
@@ -122,5 +146,7 @@ volumes:
       device: /home/shurtado/data/db
 
   redis_data:
+    driver: local
+  portainer_data:
     driver: local
 
