@@ -1,220 +1,236 @@
-# 🚀 Inception
+# Inception
 
 ![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
 ![Nginx](https://img.shields.io/badge/Nginx-009639?style=flat-square&logo=nginx&logoColor=white)
 ![WordPress](https://img.shields.io/badge/WordPress-21759B?style=flat-square&logo=wordpress&logoColor=white)
 ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=flat-square&logo=mariadb&logoColor=white)
+![PHP](https://img.shields.io/badge/PHP_8.2-777BB4?style=flat-square&logo=php&logoColor=white)
 ![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=redis&logoColor=white)
-![PHP](https://img.shields.io/badge/PHP-777BB4?style=flat-square&logo=php&logoColor=white)
-![Debian](https://img.shields.io/badge/Debian-A81D33?style=flat-square&logo=debian&logoColor=white)
+![Debian](https://img.shields.io/badge/Debian_12-A81D33?style=flat-square&logo=debian&logoColor=white)
 
-## 📋 Descripción
+![DevOps](https://img.shields.io/badge/DevOps-Containerization-blue?style=flat-square)
+![Architecture](https://img.shields.io/badge/Microservices-Architecture-green?style=flat-square)
+![Security](https://img.shields.io/badge/TLS_1.2/1.3-Security_Critical-red?style=flat-square)
 
-Proyecto **Inception** del currículo de 42 School: una infraestructura completa de WordPress containerizada usando Docker Compose. Implementa un stack LEMP (Linux, Nginx, MariaDB, PHP-FPM) con características de alta disponibilidad, persistencia de datos y herramientas de administración adicionales.
+## Descripción
 
-El proyecto demuestra competencias avanzadas en **DevOps**, **Containerización** y **Arquitectura de Microservicios**, desplegando un sistema de blogging escalable con caché Redis, acceso FTP seguro y paneles de administración profesionales.
+**Inception** es una infraestructura cloud-native que despliega WordPress en arquitectura de microservicios containerizados. Implementa un stack LEMP completo (Linux, Nginx, MariaDB, PHP-FPM) con caché Redis para alto rendimiento, secrets management con Docker Secrets y orquestación mediante Docker Compose. Demuestra competencias avanzadas enDevOps, containerización y diseño de arquitecturas escalables y seguras.
 
-## ✨ Características Principales
+## Características Principales
 
-- **🔒 SSL/TLS Seguro**: Configuración HTTPS con certificados auto-firmados (TLS 1.2/1.3)
-- **⚡ Caché de Alto Rendimiento**: Integración Redis para optimización de WordPress
-- **💾 Persistencia de Datos**: Volúmenes Docker bind-mount para datos persistentes
-- **🔐 Gestión de Secretos**: Contraseñas almacenadas de forma segura usando Docker Secrets
-- **📊 Monitoreo y Administración**: 
-  - Adminer para gestión de base de datos vía web
-  - Portainer para administración de contenedores Docker
-- **📁 Acceso FTP**: Servidor FTP seguro para gestión de archivos WordPress
-- **🔄 Auto-reinicio**: Política `unless-stopped` para alta disponibilidad
+- **TLS/SSL Seguro**: Terminación HTTPS con certificados auto-firmados, soporte TLS 1.2 y 1.3
+- **Object Cache con Redis**: Integración automática de Redis Cache para WordPress, reduciendo latencia de BD
+- **Docker Secrets**: Gestión segura de credenciales sin hardcodeo en imágenes
+- **Bootstrap Automatizado**: WP-CLI para instalación y configuración automática de WordPress
+- **Red Aislada**: Network dedicada `inception` para comunicación inter-servicios
+- **Persistencia Garantizada**: Volúmenes bind-mount con idempotencia en reinicios
+- **Alta Disponibilidad**: Política `unless-stopped` en todos los contenedores
+- **Servicios de Administración**: Adminer (BD), Portainer (Docker), FTP (archivos)
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnológico
 
-| Componente | Tecnología | Propósito |
-|------------|-----------|-----------|
-| **Servidor Web** | Nginx 1.22 | Proxy inverso y servidor HTTPS |
-| **Aplicación** | WordPress 6.x + PHP-FPM 8.2 | CMS para gestión de contenido |
-| **Base de Datos** | MariaDB 10.11 | Almacenamiento relacional |
-| **Caché** | Redis 7.x | Caché de objetos y sesiones |
-| **OS Base** | Debian 12 (Bookworm) | Imágenes Docker ligeras y seguras |
-| **Orquestación** | Docker Compose | Gestión de servicios multi-contenedor |
+| Categoría | Tecnología | Versión | Función |
+|-----------|-----------|---------|---------|
+| **Reverse Proxy** | Nginx | 1.22+ | SSL termination, FastCGI proxy |
+| **Application Server** | PHP-FPM | 8.2 | Procesamiento PHP |
+| **CMS** | WordPress | Latest | Gestión de contenido |
+| **Database** | MariaDB | 10.11 | Almacenamiento relacional |
+| **Cache** | Redis | 7.x | Object cache, sesiones |
+| **Orchestration** | Docker Compose | 2.x | Multi-container management |
+| **Base OS** | Debian | Bookworm (12) | Imágenes base lightweight |
+| **CLI Tools** | WP-CLI | Latest | Automatización WordPress |
 
-### Herramientas Adicionales
-- **Adminer**: Cliente web para administración de MariaDB
-- **Portainer CE 2.20**: Dashboard de gestión Docker
-- **vsftpd**: Servidor FTP seguro
-- **WP-CLI**: Herramienta de línea de comandos para WordPress
+### Servicios Adicionales
 
-## 🏗️ Decisiones Técnicas y Arquitectura
+| Servicio | Puerto | Propósito |
+|----------|--------|-----------|
+|vsftpd | 21, 21000-21010 | Acceso FTP seguro |
+| Adminer | 8081 | Administración web de BD |
+| Portainer CE | 9443 | Dashboard de gestión Docker |
 
-### Microservicios Desacoplados
-La arquitectura implementa el patrón **separation of concerns** donde cada servicio tiene una responsabilidad única:
-- **Nginx** actúa como reverse proxy y termina SSL/TLS, mejorando la seguridad
-- **PHP-FPM** procesa el código PHP de forma independiente, permitiendo escalabilidad horizontal
-- **MariaDB** gestiona la persistencia relacional con configuraciones optimizadas para WordPress
+## Decisiones Técnicas y Arquitectura
 
-### Seguridad en Capas
-- **Docker Secrets** para credenciales sensibles, evitando hardcodeo en imágenes
-- **Red Aislada** (`inception` network) para comunicación interna entre servicios
-- **TLS 1.2/1.3** obligatorio, eliminando protocolos vulnerables
-- **Usuarios no-root** en contenedores donde es posible
+### Separación de Responsabilidades
+La arquitectura implementa el patrón **separation of concerns** donde cada contenedor tiene responsabilidad única. Nginx actúa exclusivamente como reverse proxy terminando SSL/TLS, delegando el procesamiento PHP a PHP-FPM mediante FastCGI. Esto permite escalar horizontalmente PHP Workers de forma independiente al servidor web.
 
-### Optimización de Rendimiento
-- **Redis como Object Cache**: Reduce consultas a MariaDB en un 40-60%
-- **Bind Mounts** para desarrollo: Cambios en tiempo real sin rebuild
-- **Volúmenes Docker** para datos críticos: Garantiza persistencia ante reinicios
+### Secret Management
+Las credenciales seinyectan mediante **Docker Secrets** (archivos montados en `/run/secrets/`) evitando hardcodeo en Dockerfiles o variables de entorno expuestas. Los scripts de entrypoint leen los secrets en runtime, manteniendo las imágenes portables y seguras.
 
-## 📊 Diagrama de Arquitectura
+### Bootstrap Idempotente
+Los scripts `entrypoint.sh` implementan **inicialización idempotente**: detectan estado previo (archivos marker, wp-config.php existente) y ejecutan configuración solo cuando es necesario. MariaDB inicializa esquemas con `mariadb-install-db` y SQL de bootstrap; WordPress detecta instalación previa antes de `wp core install`.
+
+### Conexiones con Wait-For-Dependency
+WordPress utiliza `mysqladmin ping` en bucle para garantizar que MariaDB responde antes de conectar. Este patrón de **healthcheck inicial**previene race conditions en el arranque de contenedores dependientes.
+
+### BindMounts vs Volúmenes Nombrados
+- `/home/user/data/wp`: WordPress files (bind mount) - permite acceso FTP directo
+- `/home/user/data/db`: MariaDB data (bind mount) - persistencia de datos
+- Volúmenes Docker: Redis y Portainer (datos internos no expuestos)
+
+## Diagrama de Arquitectura
 
 ```mermaid
-flowchart TB
-    subgraph Host
-        Client[Cliente Web]
+flowchart TD
+    subgraph Clienteexterior
+        User[ Usuario ]
     end
 
-    subgraph "Docker Network inception"
-        Nginx[Nginx 443<br/>SSL Termination]
-        WP[WordPress 9000<br/>PHP-FPM 8.2]
-        DB[(MariaDB 3306)]
-        Redis[(Redis 6379)]
-        FTP[FTP 21<br/>vsftpd]
-        Adminer[Adminer 8080]
-        Portainer[Portainer 9443]
-        DockerSock[Docker Socket]
+    subgraph Docker["Docker Host"]
+        subgraph Net["Red inception (aislada)"]
+            Nginx["Nginx:443<br/>SSL Termination"]
+            WP["WordPress:9000<br/>PHP-FPM 8.2"]
+            DB[("MariaDB:3306<br/>Base de datos")]
+            Redis[("Redis:6379<br/>Object Cache")]
+        end
+
+        subgraph Extras["Servicios Extra"]
+            FTP["FTP:21"]
+            Adminer["Adminer:8080"]
+            Portainer["Portainer:9443"]
+        end
     end
 
-    subgraph Persistencia
-        Vol1[wp_volume]
-        Vol2[db_volume]
-        Vol3[redis_volume]
-        Vol4[portainer_volume]
+    subgraph Secrets["Gestión deSecretos"]
+        S1[db_password]
+        S2[db_root_password]
+        S3[wp_admin_password]
     end
 
-    subgraph Seguridad
-        Secrets[Docker Secrets]
+    subgraph Vols["Persistencia"]
+        V1[("/home/user/data/wp")]
+        V2[("/home/user/data/db")]
     end
 
-    Client -->|HTTPS| Nginx
-    Nginx -->|FastCGI| WP
-    WP -->|MySQL| DB
-    WP -.->|Cache| Redis
-    FTP -->|Volume| Vol1
-    Adminer -->|MySQL| DB
-    Portainer -->|API| DockerSock
+    User -->|"HTTPS"| Nginx
+    Nginx -->|"FastCGI"| WP
+    WP -->|"MySQL"| DB
+    WP <--->|"Cache"| Redis
     
-    WP -.->|Volume| Vol1
-    DB -.->|Volume| Vol2
-    Redis -.->|Volume| Vol3
-    Portainer -.->|Volume| Vol4
+    WP --> V1
+    DB --> V2
+    FTP --> V1
     
-    DB -.->|Secrets| Secrets
-    WP -.->|Secrets| Secrets
+    DB -.->|"read"| S1
+    DB -.->|"read"| S2
+    WP -.->|"read"| S3
+    WP -.->|"read"| S1
 ```
 
-## 🚀 Guía de Instalación
+## Instalación
 
 ### Prerrequisitos
 - Docker Engine 24.x+
 - Docker Compose 2.x+
-- Linux (testeado en Debian/Ubuntu)
+- Make (opcional)
 
 ### Pasos de Instalación
 
 ```bash
-# 1. Clonar el repositorio
+# 1. Clonar repositorio
 git clone https://github.com/samuelhm/inception.git
 cd inception
 
-# 2. Crear archivo de variables de entorno
+# 2. Crear directorio de secretos
+mkdir -p secrets
+
+# 3. Generar contraseñas seguras (ejemplo)
+openssl rand -base64 32 > secrets/db_password.txt
+openssl rand -base64 32 > secrets/db_root_password.txt
+openssl rand -base64 32 > secrets/wp_admin_password.txt
+openssl rand -base64 32 > secrets/wp_second_password.txt
+openssl rand -base64 32 > secrets/mysql_supervisor_password.txt
+
+# 4. Crear archivo de entorno
 cat > srcs/.env << 'EOF'
-DOMAIN=shurtado.42.fr
-WP_URL=https://shurtado.42.fr
-WP_TITLE="Mi Blog WordPress"
+DOMAIN=localhost
+WP_URL=https://localhost
+WP_TITLE="Mi Blog"
 WP_ADMIN_USER=admin
-WP_ADMIN_EMAIL=admin@example.com
+WP_ADMIN_EMAIL=admin@localhost
 WP_SECOND_USER=editor
-WP_SECOND_EMAIL=editor@example.com
+WP_SECOND_EMAIL=editor@localhost
 MYSQL_DATABASE=wordpress
 MYSQL_USER=wp_user
 MYSQL_SUPERVISOR=wp_supervisor
 FTP_USER=ftpuser
-FTP_PASS=ftppass
+FTP_PASS=ftppassword
 EOF
-
-# 3. Crear directorios de secretos
-mkdir -p secrets
-
-# 4. Crear archivos de contraseñas seguras
-echo "secure_password_123" > secrets/db_password.txt
-echo "root_password_456" > secrets/db_root_password.txt
-echo "admin_pass_789" > secrets/wp_admin_password.txt
-echo "editor_pass_012" > secrets/wp_second_password.txt
-echo "supervisor_pass_345" > secrets/mysql_supervisor_password.txt
 
 # 5. Crear directorios de datos
 mkdir -p /home/$USER/data/wp /home/$USER/data/db
 
-# 6. Construir y levantar servicios
+# 6. Construir y desplegar
 make up
-# o manualmente:
-# docker compose -f srcs/docker-compose.yml up -d --build
+```
 
-# 7. Verificar estado
-make status
-# o:
-# docker compose -f srcs/docker-compose.yml ps
+### Comandos Disponibles
+
+```bash
+make up       # Construir y levantar servicios
+make down     # Detener servicios
+make clean    # Detener y eliminar volúmenes
+make fclean   # Limpieza total (incluye datos)
+make re       # Reconstrucción desde cero
+```
+
+### Verificación
+
+```bash
+# Estado de contenedores
+docker compose -f srcs/docker-compose.yml ps
+
+# Logs de un servicio
+docker logs nginx
+docker logs wordpress
+docker logs mariadb
 ```
 
 ### Acceso a Servicios
 
-| Servicio | URL | Credenciales |
-|----------|-----|--------------|
-| WordPress | https://localhost o https://shurtado.42.fr | Configuradas en .env |
-| Adminer | http://localhost:8081 | Mismo que WordPress DB |
-| Portainer | https://localhost:9443 | Crear en primera ejecución |
-| FTP | localhost:21 | Configuradas en .env |
+| Servicio | URL | Descripción |
+|----------|-----|-------------|
+| WordPress | https://localhost | Sitio principal |
+| Adminer | http://localhost:8081 | Gestión de BD |
+| Portainer | https://localhost:9443 | Dashboard Docker |
+| FTP | localhost:21 | Acceso archivos |
 
-### Comandos Útiles
-
-```bash
-# Ver logs de todos los servicios
-make logs
-
-# Reiniciar un servicio específico
-docker compose -f srcs/docker-compose.yml restart wordpress
-
-# Acceder a shell de un contenedor
-docker exec -it wordpress bash
-docker exec -it mariadb mysql -u root -p
-
-# Detener todos los servicios
-make down
-
-# Limpieza completa (elimina volúmenes y datos)
-make fclean
-```
-
-## 📁 Estructura del Proyecto
+## Estructura del Proyecto
 
 ```
 inception/
-├── Makefile                 # Automatización de comandos
+├── Makefile
 ├── srcs/
-│   ├── docker-compose.yml   # Orquestación de servicios
+│   ├── docker-compose.yml
 │   └── requirements/
-│       ├── nginx/           # Servidor web reverse proxy
-│       ├── wordpress/       # Aplicación PHP-FPM
-│       ├── mariadb/         # Base de datos
+│       ├── nginx/
+│       │   ├── Dockerfile
+│       │   ├── conf/nginx.conf
+│       │   └── tools/entrypoint.sh
+│       ├── wordpress/
+│       │   ├── Dockerfile
+│       │   ├── conf/www.conf
+│       │   └── tools/entrypoint.sh
+│       ├── mariadb/
+│       │   ├── Dockerfile
+│       │   ├── conf/my.cnf
+│       │   └── tools/
+│       │       ├── entrypoint.sh
+│       │       └── init_db.sh
 │       └── bonus/
-│           ├── redis/       # Caché en memoria
-│           ├── ftp/         # Servidor FTP
-│           ├── adminer/     # Admin BD web
-│           └── portainer/   # Gestión Docker
-└── secrets/                 # Credenciales (no versionadas)
+│           ├── redis/
+│           ├── ftp/
+│           ├── adminer/
+│           └── portainer/
+└── secrets/
 ```
 
-## 📞 Contacto
-- **GitHub**: https://github.com/samuelhm/
-- **LinkedIn**: https://www.linkedin.com/in/shurtado-m/
+## Contacto
+
+| Plataforma | Enlace |
+|------------|--------|
+| GitHub | https://github.com/samuelhm/ |
+| LinkedIn | https://www.linkedin.com/in/shurtado-m/ |
 
 ---
 
-<p align="center">Desarrollado como parte del currículo de 42 School 🎓</p>
+<p align="center">Proyecto del currículum de42 School</p>
